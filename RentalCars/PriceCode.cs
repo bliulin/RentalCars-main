@@ -1,9 +1,10 @@
 ﻿namespace RentalCars
 {
-    public enum PriceCode
+    enum PriceCode
     {
         Regular,
         Premium,
-        Mini
+        Mini,
+        Luxury
     }
 }

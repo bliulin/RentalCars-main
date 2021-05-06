@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RentalCars.Statements
 {
-    public interface IStatement
+    interface IStatement
     {
         string GetStatement(IEnumerable<Rental> rentalEvents);
     }

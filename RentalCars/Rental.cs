@@ -1,6 +1,6 @@
 ﻿namespace RentalCars
 {
-    public class Rental
+    class Rental
     {
         public Rental(Customer customer, RentalLocation location, Car car, int daysRented)
         {

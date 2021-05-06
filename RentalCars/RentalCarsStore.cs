@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace RentalCars
 {
-    public class RentalCarsStore
+    class RentalCarsStore
     {
         private readonly List<Rental> _rentals = new List<Rental>();
 

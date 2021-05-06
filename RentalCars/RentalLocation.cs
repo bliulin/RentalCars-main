@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RentalCars
 {
-    public enum RentalLocation
+    enum RentalLocation
     {
         Iasi = 0,
         Bucharest = 1

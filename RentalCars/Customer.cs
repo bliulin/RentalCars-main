@@ -2,7 +2,7 @@
 
 namespace RentalCars
 {
-    public class Customer
+    class Customer
     {
         public Customer(string name)
         {

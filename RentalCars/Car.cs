@@ -1,6 +1,6 @@
 ﻿namespace RentalCars
 {
-    public class Car
+    class Car
     {
         public Car(PriceCode priceCode, string model)
         {
