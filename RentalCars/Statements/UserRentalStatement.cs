@@ -1,35 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-namespace RentalCars
+namespace RentalCars.Statements
 {
-    public class RentalCars
+    class UserRentalStatement : IStatement
     {
-        private readonly List<Rental> _rentals = new List<Rental>();
-
-        public RentalCars(string name)
-        {
-            Name = name;
-        }
-
-        public string Name { get; }
-
-        public void AddRental(Rental rental)
-        {
-            _rentals.Add(rental);
-            rental.Customer.AddRental(rental);
-        }
-
-        public string Statement()
+        public string GetStatement(IEnumerable<Rental> rentalEvents)
         {
             double pricePerDay = 20;
             double totalAmount = 0;
             var frequentRenterPoints = 0;
 
-            var r = "Rental Record for " + Name + "\n";
-            r += "------------------------------\n";
+            string r = string.Empty;
 
-            foreach (var each in _rentals)
+            foreach (var each in rentalEvents)
             {
                 double thisAmount = 0;
 
