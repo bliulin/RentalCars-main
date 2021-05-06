@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RentalCars.RentalCalculators;
+using RentalCars.Store;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,55 +8,34 @@ namespace RentalCars.Statements
 {
     class UserRentalStatement : IStatement
     {
+        private IRentalCalculator rentalCalculator = new RentalCalculator(new InMemoryPricesStore()); //TODO ctor inject
+
         public string GetStatement(IEnumerable<Rental> rentalEvents)
         {
-            double pricePerDay = 20;
-            double totalAmount = 0;
-            var frequentRenterPoints = 0;
+            StringBuilder sb = new StringBuilder();
 
-            string r = string.Empty;
-
-            foreach (var each in rentalEvents)
+            decimal total = 0;
+            foreach (var rentalEvent in rentalEvents)
             {
-                double thisAmount = 0;
-
-                // determines the amount for each line
-                switch (each.Car.PriceCode)
+                try
                 {
-                    case PriceCode.Regular:
-                        thisAmount += pricePerDay * 2;
-                        if (each.DaysRented > 2)
-                            thisAmount += (each.DaysRented - 2) * pricePerDay * 0.75;
-                        break;
-                    case PriceCode.Premium:
-                        thisAmount += each.DaysRented * pricePerDay * 1.5;
-                        break;
-                    case PriceCode.Mini:
-                        thisAmount += pricePerDay * 3 * 0.75;
-                        if (each.DaysRented > 3)
-                            thisAmount += (each.DaysRented - 3) * pricePerDay * 0.5;
-                        break;
+                    var result = rentalCalculator.PerformRentalOperation(rentalEvent);
+                    rentalEvent.Customer.FrequentRenterPoints += result.FrequentRenterPointsAwarded;
+                    total += result.Amount;
+                    //r += each.Customer.Name + "\t" + each.Car.Model + "\t" + each.DaysRented + "d \t" + thisAmount + " EUR\n";
+                    sb.AppendLine($"{rentalEvent.Customer.Name}\t{rentalEvent.Car.Model}\t{rentalEvent.DaysRented}d \t{result.Amount} EUR");
                 }
-
-                if (each.Customer.FrequentRenterPoints >= 5)
+                catch (Exception)
                 {
-                    thisAmount = thisAmount * 0.95;
+                    //TODO: append error
                 }
-
-                frequentRenterPoints = 1;
-                if (each.Car.PriceCode == PriceCode.Premium
-                    && each.DaysRented > 1)
-                    frequentRenterPoints++;
-
-                each.Customer.FrequentRenterPoints += frequentRenterPoints;
-
-                r += each.Customer.Name + "\t" + each.Car.Model + "\t" + each.DaysRented + "d \t" + thisAmount + " EUR\n";
-                totalAmount += thisAmount;
             }
-            r += "------------------------------\n";
-            r += "Total revenue " + totalAmount + " EUR\n";
 
-            return r;
+            //r += "------------------------------\n";
+            //r += "Total revenue " + totalAmount + " EUR\n";
+            sb.AppendLine("------------------------------");
+            sb.AppendLine($"Total revenue {total} EUR");
+            return sb.ToString();
         }
     }
 }

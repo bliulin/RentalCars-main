@@ -15,8 +15,13 @@ namespace RentalCars.RentalCalculators
             this.pricesStore = pricesStore;
         }
 
-        public RentalResult PerformRentalOperation(Customer customer, PriceCode priceCode, RentalLocation location, int rentalDays)
+        public RentalResult PerformRentalOperation(Rental rentalEvent)
         {
+            var location = rentalEvent.Location;
+            var priceCode = rentalEvent.Car.PriceCode;
+            var rentalDays = rentalEvent.DaysRented;
+            var customer = rentalEvent.Customer;
+
             var applicableCategory = this.pricesStore.GetServices(location, priceCode).FirstOrDefault();
 
             if (applicableCategory == null)
@@ -27,6 +32,12 @@ namespace RentalCars.RentalCalculators
             if (customer.FrequentRenterPoints < applicableCategory.MinimumFrequentRenterPoints)
             {
                 throw new Exception("Unsufficient frequent renter points for this service.");
+            }
+
+            int freqRenterPointsAwarded = 1;
+            if (rentalDays >= 2 && priceCode == PriceCode.Premium)
+            {
+                freqRenterPointsAwarded = 2;
             }
 
             int index = 0;
@@ -49,12 +60,6 @@ namespace RentalCars.RentalCalculators
             if (customer.FrequentRenterPoints >= 5 && priceCode != PriceCode.Luxury)
             {
                 amount -= amount * 5 / 100;
-            }
-
-            int freqRenterPointsAwarded = 1;
-            if (rentalDays >= 2 && priceCode == PriceCode.Premium)
-            {
-                freqRenterPointsAwarded = 2;
             }
 
             return new RentalResult
