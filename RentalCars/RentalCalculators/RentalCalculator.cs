@@ -57,15 +57,20 @@ namespace RentalCars.RentalCalculators
                 }
             }
 
+            var discount = 0;
             if (customer.FrequentRenterPoints >= 5 && priceCode != PriceCode.Luxury)
             {
-                amount -= amount * 5 / 100;
+                discount = 5 / 100;
             }
+
+            amount -= discount;
 
             return new RentalResult
             {
                 Amount = amount,
-                FrequentRenterPointsAwarded = freqRenterPointsAwarded
+                FrequentRenterPointsAwarded = freqRenterPointsAwarded,
+                Rental = rentalEvent,
+                Discount = discount
             };
         }
     }
