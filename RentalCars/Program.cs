@@ -27,7 +27,7 @@ namespace RentalCars
             var rentalManager = new RentalManager();
             var ops = rentalManager.ProcessRentalEvents(rentalStore.Events);
 
-            RentalStatementGenerator rentalStatement = new RentalStatementGenerator("Rental Company LLC");
+            RentalStatement rentalStatement = new RentalStatement("Rental Company LLC");
             Console.WriteLine(rentalStatement.GetStatement(ops.ToList()));
 
             var categoryStatement = new CategoryStatement();

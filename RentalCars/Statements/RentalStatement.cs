@@ -6,9 +6,9 @@ using System.Text;
 
 namespace RentalCars
 {
-    class RentalStatementGenerator : IStatement
+    class RentalStatement : IStatement
     {
-        public RentalStatementGenerator(string name)
+        public RentalStatement(string name)
         {
             Name = name;
         }
