@@ -27,9 +27,11 @@ namespace RentalCars
                     rentalEvent.Customer.FrequentRenterPoints += result.FrequentRenterPointsAwarded;
                     results.Add(result);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    //TODO: append error
+                    var errorResult = new RentalResult();
+                    errorResult.Errors.Add(e);
+                    results.Add(errorResult);
                 }
             }
 
